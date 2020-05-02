@@ -12,7 +12,9 @@ const LaunchRequestHandler = {
     async handle(handlerInput) {
         const attributesManager = handlerInput.attributesManager;
         const s3Attributes = await attributesManager.getPersistentAttributes() || {};
-        let bootCount = s3Attributes.hasOwnProperty('bootCount')? s3Attributes.bootCount : undefined;
+        let bootCount = s3Attributes.hasOwnProperty('bootCount')? s3Attributes[0].meta.bootCount : undefined; //hasOwnPropertyがfalseになっているために初回起動と認識される。
+                                                                                                            　//pushだと末尾に結合されていくため、配列内に独立してbootCountを用意して
+                                                                                                            　//recordCountを各statusに付番したい。
         
         if(bootCount === undefined){
             const speakOutput = `ようこそ排便管理スキルへ！このスキルではあなたの排便状態を記録し、私が管理をしてあげます。初めてだと緊張しちゃいますよね？うんちが出たら、私に長さ、色、柔らかさを教えて下さい。`;
@@ -21,6 +23,7 @@ const LaunchRequestHandler = {
                 .reprompt(speakOutput)
                 .getResponse();
         }
+        bootCount = ++bootCount;
         const speakOutput = `排便管理スキルの起動ありがとうございます。${bootCount}回目の排便ですね。早速ですが、長さ、色、柔らかさを教えて下さい。`;
         
         return handlerInput.responseBuilder
@@ -38,7 +41,7 @@ const unkoStatusIntentHandler = {
         let saveData;
         const attributesManager = handlerInput.attributesManager;
         const s3Attributes = await attributesManager.getPersistentAttributes() || {};
-        let bootCount = s3Attributes.hasOwnProperty('bootCount')? s3Attributes.bootCount : 0;
+        let bootCount = s3Attributes.hasOwnProperty('bootCount')? s3Attributes[0].meta.bootCount : 0;　//hasOwnPropertyがfalseになっているために0が代入される。
         
         const voiceLength = Alexa.getSlotValue(handlerInput.requestEnvelope, 'length');
         const voiceUnit = Alexa.getSlotValue(handlerInput.requestEnvelope, 'unit');
@@ -210,6 +213,6 @@ exports.handler = Alexa.SkillBuilders.custom()
         ErrorHandler,
     )
         .withPersistenceAdapter(
-         new persistenceAdapter.S3PersistenceAdapter({bucketName:'バケット名が入る。公開リポジトリのためマスク'})
+         new persistenceAdapter.S3PersistenceAdapter({bucketName:'バケット名が入る'})
     )
     .lambda();
