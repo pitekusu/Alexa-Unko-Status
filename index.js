@@ -11,12 +11,18 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
         const attributesManager = handlerInput.attributesManager;
-        const s3Attributes = await attributesManager.getPersistentAttributes() || {};
-        let bootCount = s3Attributes.hasOwnProperty('bootCount')? s3Attributes[0].meta.bootCount : undefined; //hasOwnPropertyがfalseになっているために初回起動と認識される。
-                                                                                                            　//pushだと末尾に結合されていくため、配列内に独立してbootCountを用意して
-                                                                                                            　//recordCountを各statusに付番したい。
+        //const s3Attributes = await attributesManager.getPersistentAttributes() || {};
+        let s3Attributes = await attributesManager.getPersistentAttributes() || [{meta: {bootCount: 0}}];
         
-        if(bootCount === undefined){
+        console.dir(`s3Attributesの状態：${s3Attributes[0]}`);
+        //let bootCount = s3Attributes[0].meta.hasOwnProperty('bootCount')? s3Attributes[0].meta.bootCount : undefined; 
+        //let bootCount = s3Attributes ? s3Attributes[ s3Attributes.length -1 ].meta.bootCount : 0
+        //let bootCount = s3Attributes === undefined ? 0: s3Attributes[ s3Attributes.length -1 ].meta.bootCount;
+        //let bootCount = s3Attributes[0].hasOwnProperty('meta') ? s3Attributes[ s3Attributes.length -1 ].meta.bootCount :0;
+        let bootCount = s3Attributes[0] === undefined ? 0: s3Attributes[ s3Attributes.length -1 ].meta.bootCount;
+        console.log(`hasOwnPropertyの状態：${s3Attributes.hasOwnProperty('bootCount')}`);                                                                                                 　
+
+        if(bootCount === 0){
             const speakOutput = `ようこそ排便管理スキルへ！このスキルではあなたの排便状態を記録し、私が管理をしてあげます。初めてだと緊張しちゃいますよね？うんちが出たら、私に長さ、色、柔らかさを教えて下さい。`;
             return handlerInput.responseBuilder
                 .speak(speakOutput)
@@ -41,7 +47,7 @@ const unkoStatusIntentHandler = {
         let saveData;
         const attributesManager = handlerInput.attributesManager;
         const s3Attributes = await attributesManager.getPersistentAttributes() || {};
-        let bootCount = s3Attributes.hasOwnProperty('bootCount')? s3Attributes[0].meta.bootCount : 0;　//hasOwnPropertyがfalseになっているために0が代入される。
+        let bootCount = s3Attributes[0] === undefined ? 0: s3Attributes[ s3Attributes.length -1 ].meta.bootCount;
         
         const voiceLength = Alexa.getSlotValue(handlerInput.requestEnvelope, 'length');
         const voiceUnit = Alexa.getSlotValue(handlerInput.requestEnvelope, 'unit');
@@ -213,6 +219,6 @@ exports.handler = Alexa.SkillBuilders.custom()
         ErrorHandler,
     )
         .withPersistenceAdapter(
-         new persistenceAdapter.S3PersistenceAdapter({bucketName:'バケット名が入る'})
+         new persistenceAdapter.S3PersistenceAdapter({bucketName:'amzn1-ask-skill-821aa377-a5ea-buildsnapshotbucket-1ku4vcse68w5x'})
     )
     .lambda();
