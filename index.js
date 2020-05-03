@@ -103,7 +103,8 @@ const unkoStatusIntentHandler = {
             saveData = newSavedata;
         }else if(bootCount !== 1){ //ここテキトー
         console.log(`【起動回数2以上のとき】`);
-        saveData = s3Attributes.push(newSavedata);
+        //saveData = s3Attributes.push(newSavedata);
+        saveData = s3Attributes.prototype.push.apply(newSavedata); //TypeError: Cannot read property 'push' of undefined
             
         }
         console.dir(`起動回数：${bootCount}`);
