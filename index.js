@@ -59,7 +59,7 @@ const unkoStatusIntentHandler = {
         //セッションアトリビュートを取得
         const attributes = attributesManager.getSessionAttributes();
         
-        let unkoLength = voiceLength || attributes.length;
+        let unkoLength = parseInt(voiceLength) || parseInt(attributes.unkoLength);
         let unit = voiceUnit|| attributes.unit;
         let color = voiceColor || attributes.color;
         let soft = voiceSoft || attributes.soft;
@@ -100,7 +100,7 @@ const unkoStatusIntentHandler = {
         
         if(bootCount === 1){
             console.log(`【初回起動のとき】`);
-            saveData = newSavedata;
+            saveData = [newSavedata];
         }else if(bootCount !== 1){ //ここテキトー
         console.log(`【起動回数2以上のとき】`);
         //saveData = s3Attributes.push(newSavedata);
