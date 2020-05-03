@@ -19,6 +19,7 @@ const LaunchRequestHandler = {
         //let bootCount = s3Attributes ? s3Attributes[ s3Attributes.length -1 ].meta.bootCount : 0
         //let bootCount = s3Attributes === undefined ? 0: s3Attributes[ s3Attributes.length -1 ].meta.bootCount;
         //let bootCount = s3Attributes[0].hasOwnProperty('meta') ? s3Attributes[ s3Attributes.length -1 ].meta.bootCount :0;
+        console.dir(`s3Attributes[ s3Attributes.length -1 ]の中身：${s3Attributes[ s3Attributes.length -1 ]}`);
         let bootCount = s3Attributes[0] === undefined ? 0: s3Attributes[ s3Attributes.length -1 ].meta.bootCount;
         console.log(`hasOwnPropertyの状態：${s3Attributes.hasOwnProperty('bootCount')}`);                                                                                                 　
 
@@ -81,19 +82,18 @@ const unkoStatusIntentHandler = {
         };
         */
         
-    const newSavedata =[
-        {
+        const newSavedata = {
             meta: {
                 //createdAt: date, //未定義
                 bootCount: bootCount,
+                
             },
             contents: {
                 unkoLength: unkoLength,
                 color: color,
                 soft: soft,
             },
-        }   
-    ]
+        }
         
 　　　　console.log("新しく記録するデータ：" + JSON.stringify(newSavedata));
         console.log("S3から読み込んだデータ：" + JSON.stringify(s3Attributes));
@@ -105,9 +105,12 @@ const unkoStatusIntentHandler = {
         console.log(`【起動回数2以上のとき】`);
         //saveData = s3Attributes.push(newSavedata);
         //saveData = s3Attributes.prototype.push.apply(newSavedata); //TypeError: Cannot read property 'push' of undefined
+        /*永谷案
         saveData = s3Attributes.concat();
         saveData.push(newSavedata);
-            
+        */
+        s3Attributes.push(newSavedata);
+        saveData = s3Attributes;
         }
         console.dir(`起動回数：${bootCount}`);
         console.log("結合済みセーブデータ：" + JSON.stringify(saveData));
