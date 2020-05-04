@@ -1,0 +1,366 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "排便管理",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "unkoStatusIntent",
+          "slots": [
+            {
+              "name": "unkoLength",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{unkoLength} {unit}",
+                "{unkoLength} "
+              ]
+            },
+            {
+              "name": "color",
+              "type": "AMAZON.Color",
+              "samples": [
+                "{color} "
+              ]
+            },
+            {
+              "name": "soft",
+              "type": "SOFT_LIST",
+              "samples": [
+                "{soft} だった",
+                "{soft}"
+              ]
+            },
+            {
+              "name": "unit",
+              "type": "UNIT_LIST",
+              "samples": [
+                "キロメートル",
+                "キロ",
+                "ミリメートル",
+                "ミリ",
+                "センチメートル",
+                "センチ"
+              ]
+            }
+          ],
+          "samples": [
+            " {unkoLength} {unit}",
+            "やわらかさは {soft} で色は {color}  で長さは {unkoLength} {unit} ",
+            "色は {color}  で長さは {unkoLength} {unit} でやわらかさは {soft}",
+            "長さは {unkoLength} {unit} で色は {color} で やわらかさは {soft} ",
+            " {soft} だった",
+            " {soft} です",
+            "{soft} ",
+            "やわらかさは {soft} ",
+            "やわらかさは {soft} だった",
+            "やわらかさは {soft} です",
+            "{color} ",
+            "色は {color} ",
+            "色は {color} だった",
+            "長さは {unkoLength} ",
+            "長さは {unkoLength} {unit} ",
+            "長さは {unkoLength} {unit} だった",
+            "長さは {unkoLength} {unit} です"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AggregateIntent",
+          "slots": [],
+          "samples": [
+            "結果が知りたい",
+            "集計したい",
+            "今はどんな感じ",
+            "今はどうなってるの",
+            "今の状態教えて",
+            "集計結果教えて",
+            "集計して"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "下痢",
+                "synonyms": [
+                  "ぐっちょり",
+                  "べっちゃり",
+                  "水みたい",
+                  "液体",
+                  "ぬちょぬちょ",
+                  "ゆるい",
+                  "液体",
+                  "液体状",
+                  "べちゃべちゃ",
+                  "さらさら",
+                  "水っぽい",
+                  "ぐちょぐちょ"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "普通",
+                "synonyms": [
+                  "いけてる",
+                  "健康的",
+                  "良い感じ",
+                  "いい感じ",
+                  "まあまあ",
+                  "ノーマル",
+                  "問題ない",
+                  "いつもどおり",
+                  "一般的"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "硬め",
+                "synonyms": [
+                  "かため",
+                  "ガチガチ",
+                  "がちがち",
+                  "どっしり",
+                  "カチカチ",
+                  "かちかち",
+                  "しっかりめ",
+                  "しっかり",
+                  "かたい",
+                  "硬い"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "柔らかめ",
+                "synonyms": [
+                  "フニャフニャ",
+                  "ふにゃふにゃ",
+                  "ゆるめ",
+                  "ふわふわ",
+                  "ねっとり",
+                  "やわらかい",
+                  "柔らか"
+                ]
+              }
+            }
+          ],
+          "name": "SOFT_LIST"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "ミリ",
+                "synonyms": [
+                  "みり",
+                  "ミリメートル",
+                  "みり"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "キロ",
+                "synonyms": [
+                  "きろ",
+                  "キロメートル"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "センチ",
+                "synonyms": [
+                  "センチメートル",
+                  "せんちめーとる",
+                  "せんち"
+                ]
+              }
+            }
+          ],
+          "name": "UNIT_LIST"
+        }
+      ]
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "unkoStatusIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.606165534177"
+          },
+          "slots": [
+            {
+              "name": "unkoLength",
+              "type": "AMAZON.NUMBER",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.606165534177.113695468146"
+              },
+              "validations": [
+                {
+                  "type": "isGreaterThanOrEqualTo",
+                  "prompt": "Slot.Validation.606165534177.113695468146.225647042374",
+                  "value": "1"
+                },
+                {
+                  "type": "isLessThanOrEqualTo",
+                  "prompt": "Slot.Validation.725275623267.1448824850793.43250427646",
+                  "value": "100"
+                }
+              ]
+            },
+            {
+              "name": "color",
+              "type": "AMAZON.Color",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.606165534177.388543081422"
+              }
+            },
+            {
+              "name": "soft",
+              "type": "SOFT_LIST",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.606165534177.471538700718"
+              },
+              "validations": [
+                {
+                  "type": "hasEntityResolutionMatch",
+                  "prompt": "Slot.Validation.1034346629839.1157508086949.596764609445"
+                }
+              ]
+            },
+            {
+              "name": "unit",
+              "type": "UNIT_LIST",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.725275623267.748576880911"
+              },
+              "validations": [
+                {
+                  "type": "isInSet",
+                  "prompt": "Slot.Validation.596245576700.389320610022.1362525447987",
+                  "values": [
+                    "センチ",
+                    "センチメートル"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Elicit.Slot.606165534177.113695468146",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "うんちの長さを教えて下さい"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.606165534177",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "長さは {unkoLength} {unit} で、色は {color} 、柔らかさは {soft}でよろしいですか？"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.606165534177.471538700718",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "柔らかさを教えて下さい"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.606165534177.388543081422",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "色を教えて下さい"
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.606165534177.113695468146.225647042374",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "うんちの長さは 一センチ以上の整数にして下さい。例えば、三センチとおっしゃって下さい。"
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.1034346629839.1157508086949.596764609445",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "ごめんなさい、 {soft} と答えてもらいましたが、ちょっと難しかったです。例えば、硬い、下痢、ねっとりなどで答えてみて下さい。"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.725275623267.748576880911",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "うんちの長さは、センチで言ってくださいね"
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.725275623267.1448824850793.43250427646",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "{unkoLength}センチと聞こえましたが、そんなに長いうんち出ないですよね？もう一度言ってもらえませんか？"
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.596245576700.389320610022.1362525447987",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "うんちの長さはセンチで答えてくださいね。例えば {unkoLength}センチとおっしゃって下さい。"
+          }
+        ]
+      }
+    ]
+  },
+  "version": "41"
+}
