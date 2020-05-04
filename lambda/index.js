@@ -159,7 +159,27 @@ const AggregateHandler = {
     async handle(handlerInput) {
         const attributesManager = handlerInput.attributesManager;
         const s3Attributes = await attributesManager.getPersistentAttributes() || {};
-        const speakOutput = '集計用インテントです。';
+        let bootCount = s3Attributes[0] === undefined ? 0: s3Attributes[ s3Attributes.length -1 ].meta.bootCount;
+        
+        //うんこの長さの配列
+        let unkoLengthArray = s3Attributes.map(item => item.contents.unkoLength);
+        //色の配列
+        let colorArray = s3Attributes.map(item => item.contents.color);
+        //うんこの柔らかさの配列
+        let softArray = s3Attributes.map(item => item.contents.soft);
+        
+        //長さの最大値、最小値を取得して、要素の位置を元々のセーブデータで検索する
+        const aryMax = function (a, b) {return Math.max(a, b);}
+        const aryMin = function (a, b) {return Math.min(a, b);}
+        let unkoLengthMax = unkoLengthArray.reduce(aryMax);
+        let unkoLengthMin = unkoLengthArray.reduce(aryMin);
+        let maxPlace = unkoLengthArray.lastIndexOf(unkoLengthMax);
+        let minPlace = unkoLengthArray.lastIndexOf(unkoLengthMin);
+        let maxDate = s3Attributes[maxPlace].meta.bootCount; //今後日時になおすか加える。
+        let minDate = s3Attributes[minPlace].meta.bootCount; //今後日時になおす加える。
+        console.log( unkoLengthArray);
+        
+        const speakOutput = `集計用インテントです。記録した回数は${bootCount}回です。一番長かったのは、直近では${maxDate}回目の${unkoLengthMax}センチ、一番短かったのは${minDate}回目の${unkoLengthMin}センチです。`;
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
